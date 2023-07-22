@@ -25,6 +25,7 @@ jobs:
         set -euxo pipefail
         find ci-configs -type f -name 'ghc-*.config' \
           | sort -h | jq -ncR '[inputs | {ghc:  match("ghc-(.+)\\.config$", .) | .captures[0].string | select(.), plan: .}]' | tee configs.json
+        cat configs.json
         echo "configs=$(cat configs.json)" >> "${GITHUB_OUTPUT}"
 
   build:
