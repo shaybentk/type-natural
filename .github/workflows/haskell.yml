@@ -37,3 +37,9 @@ jobs:
     steps:
     - uses: actions/checkout@v3
 
+    - name: Execute tests
+      uses: cypress-io/github-action@v5
+      with:
+        install: false
+        wait-on-timeout: 3
+        spec: ${{ matrix.spec }}
