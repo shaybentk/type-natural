@@ -10,15 +10,15 @@ jobs:
     name: Generate Build Matrix Dynamically
     runs-on: ubuntu-latest
     outputs:
-      configs: ${{ steps.enumerate.outputs.configs }}
+      spec: ${{ steps.enumerate.outputs.spec }}
     steps:
     - uses: actions/checkout@v3
     - name: Enumerate Configs
       id: enumerate
       run: |
-        set -euxo pipefail
-        find ci-configs -type f -name 'ghc-*.config' \
-          | sort -h | jq -ncR '[inputs | {ghc:  match("ghc-(.+)\\.config$", .) | .captures[0].string | select(.), plan: .}]' | tee configs.json
+        #set -euxo pipefail
+        #find ci-configs -type f -name 'ghc-*.config' \
+        #  | sort -h | jq -ncR '[inputs | {ghc:  match("ghc-(.+)\\.config$", .) | .captures[0].string | select(.), plan: .}]' | tee configs.json
         cat configs.json
         echo "configs=$(cat configs.json)" >> "${GITHUB_OUTPUT}"
 
@@ -27,12 +27,12 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        include: ${{fromJSON(needs.enumerate.outputs.configs)}}
+        include: ${{fromJSON(needs.enumerate.outputs.spec)}}
 
     runs-on: ubuntu-latest
-    name: Haskell GHC ${{ matrix.ghc }} Build
+    name: Haskell GHC ${{ matrix.group1 }} Build
     env:
-      CABAL: cabal --project-file=${{matrix.plan}}
+      CABAL: cabal --project-file=${{matrix.group1}}
 
     steps:
     - uses: actions/checkout@v3
