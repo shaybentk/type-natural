@@ -30,9 +30,9 @@ jobs:
         include: ${{fromJSON(needs.enumerate.outputs.spec)}}
 
     runs-on: ubuntu-latest
-    name: Haskell GHC ${{ matrix.group1 }} Build
+    name: Haskell GHC ${{ matrix.spec }} Build
     env:
-      CABAL: cabal --project-file=${{matrix.group1}}
+      CABAL: cabal --project-file=${{matrix.spec}}
 
     steps:
     - uses: actions/checkout@v3
@@ -46,4 +46,4 @@ jobs:
       with:
         install: false
         wait-on-timeout: 3
-        spec: ${{ matrix.group1 }}
+        spec: ${{ matrix.spec }}
