@@ -37,9 +37,13 @@ jobs:
     steps:
     - uses: actions/checkout@v3
 
+    - name: "Run Test"
+      run:  |
+        npm install cypress@10.3.1
+
     - name: Execute tests
       uses: cypress-io/github-action@v5
       with:
         install: false
         wait-on-timeout: 3
-        spec: ${{ matrix.spec }}
+        spec: ${{ matrix.group1 }}
